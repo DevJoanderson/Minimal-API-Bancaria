@@ -1,6 +1,9 @@
+using ApiBancaria.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 var app = builder.Build();
+List<Conta> contas = new();
 
 app.MapGet("/", () =>
 {
@@ -9,7 +12,16 @@ app.MapGet("/", () =>
 
 app.MapGet("/contas", () =>
 {
-    return "Lista de contas";
+    return contas;
 });
 
-app.Run();
+app.MapPost("/contas", (Conta conta) =>
+{
+    conta.Id = contas.Count + 1;
+
+    contas.Add(conta);
+
+    return Results.Created($"/contas/{conta.Id}", conta);
+});
+
+app.Run();  

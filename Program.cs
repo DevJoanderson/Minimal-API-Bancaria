@@ -24,4 +24,15 @@ app.MapPost("/contas", (Conta conta) =>
     return Results.Created($"/contas/{conta.Id}", conta);
 });
 
+app.MapGet("/contas/{id}", (int id) => {
+    Conta? conta = contas.FirstOrDefault(conta => conta.Id == id);
+
+    if (conta == null)
+    {
+        return Results.NotFound();
+    }
+
+    return Results.Ok(conta);
+});
+
 app.Run();  

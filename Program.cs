@@ -1,4 +1,6 @@
 using ApiBancaria.Models;
+using ApiBancaria.Requests;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +33,20 @@ app.MapGet("/contas/{id}", (int id) => {
     {
         return Results.NotFound();
     }
+
+    return Results.Ok(conta);
+});
+
+app.MapPost("/contas/{id}/depositar", (int id, [FromBody] DepositoRequest request) =>
+{
+    Conta? conta = contas.FirstOrDefault(conta => conta.Id == id);
+
+    if (conta == null)
+    {
+        return Results.NotFound();
+    }
+
+    conta.Depositar(request.Valor);
 
     return Results.Ok(conta);
 });
